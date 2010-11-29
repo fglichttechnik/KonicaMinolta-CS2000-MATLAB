@@ -1,0 +1,71 @@
+; USB CDC Comport Emulation Driver Setup File
+;           for Windows 2000/XP
+;   Copyright (C) 2006 KONICA MINOLTA SENSING,INC.
+
+[Version] 
+Signature="$Windows NT$" 
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318} 
+Provider=%COMPANYNAME% 
+;Provider=%MSFT% 
+LayoutFile=layout.inf
+DriverVer=08/23/2006,1.00
+
+[Manufacturer] 
+%COMPANYNAME%=DeviceList, ntx86, ntamd64
+;%MFNAME%=DeviceList
+
+[DestinationDirs] 
+DefaultDestDir=12 
+
+[SourceDisksFiles]
+
+[SourceDisksNames]
+
+[DeviceList] 
+%DESCRIPTION%=DriverInstall, USB\VID_132B&PID_2104 
+
+[DeviceList.ntx86] 
+%DESCRIPTION%=DriverInstall, USB\VID_132B&PID_2104 
+
+[DeviceList.ntamd64] 
+%DESCRIPTION%=DriverInstall, USB\VID_132B&PID_2104 
+
+;------------------------------------------------------------------------------
+;  Windows 2000/XP Sections
+;------------------------------------------------------------------------------
+
+[DriverInstall.nt] 
+include=mdmcpq.inf
+CopyFiles=DriverCopyFiles
+AddReg=DriverInstall.nt.AddReg 
+
+[DriverCopyFiles]
+usbser.sys,,,0x20
+
+[DriverInstall.nt.AddReg] 
+HKR,,DevLoader,,*ntkern 
+HKR,,NTMPDriver,,usbser.sys 
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider" 
+
+[DriverInstall.nt.Services] 
+include=mdmcpq.inf
+AddService=usbser, 0x00000002, DriverService
+
+[DriverService] 
+DisplayName=%SERVICE% 
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\usbser.sys 
+
+;------------------------------------------------------------------------------
+;  String Definitions
+;------------------------------------------------------------------------------
+
+[Strings] 
+COMPANYNAME="KONICA MINOLTA SENSING,INC."
+;MSFT="Microsoft Corporation."
+;MFNAME="Grape Systems Inc."
+DESCRIPTION="Communications Port" 
+SERVICE="USB CDC Comport Emulation Driver"

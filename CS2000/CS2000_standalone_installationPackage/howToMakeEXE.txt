@@ -1,0 +1,16 @@
+How to create a standalone execution file:
+
+-type in "mcc -m CS2000_startGUI.m" in your command window
+-note: no "addpath 'folder'" commands should be in your m-file
+
+-then an CS2000_startGUI.exe and CS2000_startGUI.prj is created
+
+-to add relevant matlab folders containing relevant m-files:
+	-double click on CS2000_startGUI.prj
+	-chose "add files/directories"
+	-When finished click on "Build" (upper right corner of the window)
+
+	-this works much easier than "mcc -m CS2000_startGUI -a ./folder because
+	 sometimes matlab has problems to add the folder
+
+-only the CS2000_startGUI.exe is needed for your standalone application
