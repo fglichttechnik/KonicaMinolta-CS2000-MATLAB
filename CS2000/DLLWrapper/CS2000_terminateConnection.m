@@ -16,6 +16,7 @@ message = 'disconnected';
 
 disp(message);
 
+rmpath([path, '\Temp']);
 [stat, mess, id] = rmdir('Temp','s');
 
 if stat == 0

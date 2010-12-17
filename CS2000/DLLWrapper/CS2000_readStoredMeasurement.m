@@ -1,4 +1,4 @@
-function CS2000_readStoredMeasurement()
+function [text, measurements] = CS2000_readStoredMeasurement()
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
 % Reads measurement data stored in memory from the instrument.
@@ -12,14 +12,7 @@ global s
 % edit:
 comments = ' '; 
 lightSource = ' '; 
-filename = 'CS2000_storedMeasurement';
 % end edit
-
-
-% init connection to the instrument
-comPort = 'COM4';
-message = CS2000_initConnection(comPort);
-
 
 data_format = '0'; % input parameter for the instrument, data format will be alphanumeric
 
@@ -38,19 +31,22 @@ for n = 0 : 99
         ',', num2str(data_format), ',', num2str(datablock_number)]);
     
         % Get instrument answer into file:
-        answer = fscanf(s);    
+        answer = fscanf(s); 
         fid = fopen('Temp\answers.tmp', 'w');
         fprintf(fid, answer);
         fclose(fid);
     
         % Get instrument error-check code:
         fid = fopen('Temp\answers.tmp','r');
-        ErrorCheckCode = fscanf(fid,'%c',4);
+        ErrorCheckCode = fscanf(fid,'%c',4);        
         [tf, errOutput] = CS2000_errMessage(ErrorCheckCode);
-        
         if tf ~= 1 % an error occured 
             stopped  = n; % get the data store where reading stops
-            assignin('base', 'stopped', stopped);
+            assignin('base', 'stopped', stopped);            
+            if n == 0
+                text = errOutput;
+                disp(text);
+            end
             break % stop reading from instrument        
         else % no error
             if datablock_number == 4 % block 4 has 101 pieces of data
@@ -86,6 +82,10 @@ for n = 0 : 99
         ErrorCheckCode = fscanf(fid,'%c',4);
         [tf, errOutput] = CS2000_errMessage(ErrorCheckCode);
         if tf ~= 1 % an error occured
+            if n == 0
+                text = errOutput;
+                disp(text);
+            end
             break % stop reading      
         else %no error, get spectral data:
             for k = 1:24
@@ -113,7 +113,7 @@ for n = 0 : 99
         ErrorCheckCode = fscanf(fid,'%c',4);
         [tf, errOutput] = CS2000_errMessage(ErrorCheckCode);
         if tf ~= 1 % an error occured
-            disp(errorOutput);
+            disp(errOutput);
             aperture = 'error';
             break % stop reading      
         else %no error, get spectral data:
@@ -141,7 +141,8 @@ for n = 0 : 99
     measuredData.comments = comments;
     measuredData.lightSource = lightSource;
     meas{n+1} = measuredData;
-    assignin('base', 'meas', meas);
+    
+    text = 'All data have been read.';
 end 
 
 % delete empty cells:
@@ -159,15 +160,7 @@ else
     end
 end
 evalin('base', 'clear stopped');
-evalin('base', 'clear meas');
 
-%save measurement
-save(filename, 'measurements');
-
-disp('All stored data have been saved.');
-
-% terminate connection to the instrument
-message = CS2000_terminateConnection();
 end
 
 

@@ -24,7 +24,7 @@ function varargout = CS2000_menue(varargin)
 
 % Edit the above text to modify the response to help CS2000_menue
 
-% Last Modified by GUIDE v2.5 01-Oct-2010 18:12:13
+% Last Modified by GUIDE v2.5 16-Dec-2010 15:22:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -108,20 +108,91 @@ function exit_menue_Callback(hObject, eventdata, handles)
 % hObject    handle to exit_menue (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg('Close this figure and terminate connection?',...
+user_response = questdlg('Close CS2000 menu and terminate connection?',...
       'Close Request Function',...
-      'Yes','No','Yes'); 
-   switch selection, 
-      case 'Yes',
-        message = CS2000_terminateConnection();
-        set(handles.openText, 'String', message); 
-        pause(2);
-        delete(hObject);
-        evalin('base', 'clear');
-        delete(gcf)        
-      case 'No'
-      return 
-   end
+      'Yes','No','No'); 
+switch user_response
+    case {'No'}
+        % take no action
+    case 'Yes'
+        % Prepare to close GUI application window
+        guidata(hObject, handles);
+        pause(1);
+        [~] = CS2000_terminateConnection();
+        pause(1);
+        delete(handles.figure1)
+end
+
+% --------------------------------------------------------------------
+function storedMeasurements_Callback(hObject, eventdata, handles)
+% hObject    handle to storedMeasurements (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+checkfilename = 1;
+while checkfilename == 1
+    CS2000_storedMeasurementFig;
+    uiwait(CS2000_storedMeasurementFig);
+    dir_name = evalin('base', 'dir_name');
+    delete_check = evalin('base', 'delete_check');
+
+    if ~(isempty(dir_name)) %save data      
+        file_name = evalin('base', 'file_name');
+        filename = [dir_name, '\', file_name, '.mat'];          
+        if ~(exist(filename))
+            checkreading = 1;                
+            checkfilename = 0;
+        else
+            disp('Sorry, file already exists');
+                % Construct a questdlg with two options
+                choice = questdlg('File already exists. Overwrite?', ...
+                'Save Menu', ...
+                'YES','NO, type in another filename', 'NO, type in another filename');
+                % Handle response
+                switch choice
+                    case 'YES'
+                        checkreading = 1;                            
+                        checkfilename = 0;
+                    case 'NO, type in another filename'
+                        checkreading = 0;
+                        checkfilename = 1;                    
+                    otherwise
+                        checkreading = 0;
+                        checkfilename = 1;
+                end       
+        end               
+        
+        if checkreading == 1
+            %get measurement object from camera:
+            text = 'Reading...';
+            set(handles.measureText, 'String', text);
+            disp(text);
+            drawnow;
+            [text, CS2000_allMeasurements] = CS2000_readStoredMeasurement();
+            set(handles.measureText, 'String', text);
+            disp(text);
+            drawnow;
+            %save object
+            if ~(isempty(CS2000_allMeasurements))
+                save(filename, 'CS2000_allMeasurements');
+                pause(0.1);
+                text = '.mat has been saved!';
+                set(handles.measureText, 'String', text);
+                disp(text);
+                pause(0.1);
+            else
+                set(handles.measureText, 'String', text);
+                disp(text);
+                pause(0.1);
+            end
+        end
+    elseif ~(isempty(delete_check)) %delete data
+        checkfilename = 0;
+        if delete_check == 1
+            text = CS2000_deleteStoredMeasurements();
+            set(handles.measureText, 'String', text);
+        end
+    end
+end
 % --------------------------------------------------------------------
 % --------------------------------------------------------------------
 
@@ -275,17 +346,21 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg('Close this figure and terminate connection?',...
+user_response = questdlg('Close CS2000 menu and terminate connection?',...
       'Close Request Function',...
-      'Yes','No','Yes'); 
-   switch selection, 
-      case 'Yes',
-        message = CS2000_terminateConnection();
-        set(handles.openText, 'String', message); 
-        pause(2);
-        delete(hObject);
-        evalin('base', 'clear');
-        delete(gcf)        
-      case 'No'
-      return 
-   end
+      'Yes','No','No'); 
+switch user_response
+    case {'No'}
+        % take no action
+    case 'Yes'
+        % Prepare to close GUI application window
+        guidata(hObject, handles);
+        pause(1);
+        [~] = CS2000_terminateConnection();
+        pause(1);
+        delete(handles.figure1)
+end
+
+
+
+  
