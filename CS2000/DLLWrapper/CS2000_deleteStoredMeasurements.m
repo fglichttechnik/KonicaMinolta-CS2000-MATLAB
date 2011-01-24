@@ -17,7 +17,7 @@ ErrorCheckCode = fscanf(fid,'%c',4);
 if tf ~= 1
     text = [errOutput, 'Data could not be deleted.'];
 else
-    text = 'All data has been deleted from camera.';     
+    text = 'All data has been deleted.';     
 end
 
 end

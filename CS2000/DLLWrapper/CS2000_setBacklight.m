@@ -1,4 +1,4 @@
-function CS2000_setBacklight(norm, bl)
+function message = CS2000_setBacklight(norm, bl)
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
 global s
@@ -9,9 +9,10 @@ ErrorCheckCode = fscanf(s);
 [tf, errOutput] = CS2000_errMessage(ErrorCheckCode);
     
 if tf == 1
-    CS2000_readBacklight;
+    message = CS2000_readBacklight;
 else
-    disp(errOutput);
+    message = errOutput;
+    disp(message);
 end
 
 end

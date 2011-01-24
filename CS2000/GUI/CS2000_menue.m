@@ -209,7 +209,8 @@ assignin('base', 'numMeas', numMeas);
 measurements = cell(numMeas,1);
 for i = 1 : numMeas    
     % measure
-    set(handles.measureText, 'String', 'measuring...');
+    set(handles.measureText, 'String', ['measuring... ', num2str(i), ...
+        '/', num2str(numMeas)]);
     pause(0.1);
     [message1, message2, measuredData, colorimetricNames] = CS2000_measure();
     aperture = CS2000_readApertureStop;
@@ -221,9 +222,9 @@ for i = 1 : numMeas
 
     set(handles.colorDataText, 'String', {measuredData.colorimetricData.Lv,...
         measuredData.colorimetricData.X, measuredData.colorimetricData.Z,...
-        aperture, mat2str(measuredData.timeStamp)});
+        aperture, mat2str(measuredData.timeStamp), '',numMeas});
     set(handles.colorDataNames, 'String', {colorimetricNames{2},...
-        colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time'});
+        colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', '','Number of ', 'measurements'});
     pause(0.1);
     % create objects
     measuredData.comments = get(handles.commentsEdit, 'String');
@@ -240,10 +241,11 @@ function normalLightBox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if (get(handles.normalLightBox,'Value') == get(hObject,'Max')) 
-	setBacklight(0,0);
+	message = CS2000_setBacklight(1,0);
 else
-    setBacklight(1,1);
+    message = CS2000_setBacklight(1,1);
 end
+set(handles.measureText, 'String', message);
 
 
 

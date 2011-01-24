@@ -1,4 +1,4 @@
-function CS2000_readBacklight()
+function message = CS2000_readBacklight()
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
 global s 
@@ -39,14 +39,15 @@ if tf == 1
     
     switch blmeas 
         case '0'
-            all = '';
+            all = 'off';
         case '1'
-            all = ' during measurement';
+            all = 'on';
         otherwise
             all = 'error';
     end
-
-    disp(['Backlight has been set ´', stat, '´', all]);
+    message = ['Backlight has been set ´', all,...
+        '´ during measurement.'];
+    disp(message);
 end  
 
 fclose(fid);
