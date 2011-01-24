@@ -24,7 +24,7 @@ function varargout = CS2000_menue(varargin)
 
 % Edit the above text to modify the response to help CS2000_menue
 
-% Last Modified by GUIDE v2.5 16-Dec-2010 15:22:52
+% Last Modified by GUIDE v2.5 24-Jan-2011 16:46:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -102,6 +102,20 @@ for i = 1 : numMeas
     measurements{i}.lightSource = get(handles.lightSourceEdit, 'String');
 end
 save(file_name, 'measurements');
+
+% --------------------------------------------------------------------
+function savePlot_Callback(hObject, eventdata, handles)
+% hObject    handle to savePlot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+CS2000_chosePath;
+uiwait(CS2000_chosePath);
+file_name = evalin('base', 'file_name');
+f = figure('Visible', 'off'); 
+copyobj(handles.axes1, f);  
+saveas(f, file_name, 'epsc');
+saveas(f, file_name, 'fig');
+
 
 % --------------------------------------------------------------------
 function exit_menue_Callback(hObject, eventdata, handles)
@@ -229,31 +243,37 @@ for i = 1 : numMeas
     % create objects
     measuredData.comments = get(handles.commentsEdit, 'String');
     measuredData.lightSource = get(handles.lightSourceEdit, 'String');
-    measurements{i} = measuredData;     
+    measurements{i} = measuredData;    
+    assignin('base', 'measurements', measurements);
 end
 
 
 % calculate means of measurement data
-if numMeas > 1    
+if numMeas > 1  
+    meansText = 'means';
     set(handles.measureText, 'String', 'Calculating means of measurements...'); 
     drawnow;
-    meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements);
+    meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements);    
     [Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
-    title('Means of Spectral Radiance\fontsize{18}');
-    set(handles.colorDataText, 'String', {'',...
-        meansOfMeasurements.colorimetricData.Lv,...
-        meansOfMeasurements.colorimetricData.X, meansOfMeasurements.colorimetricData.Z,...
-        aperture, mat2str(meansOfMeasurements.timeStamp),Lp,Lm,Ls, '',numMeas});
-    set(handles.colorDataNames, 'String', {'[Means] ', colorimetricNames{2},...
-        colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', ...
-        '','Lp', 'Lm', 'Ls', 'Number of ', 'measurements'});
-    assignin('base', 'measurements', measurements);
-    assignin('base', 'meansOfMeasurements', meansOfMeasurements);
-    set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
-    drawnow;
+    title([meansText,' of Spectral Radiance\fontsize{18}']);    
+else
+    meansText = '';
+    [Lp, Lm, Ls] = calcLuminance(measurements{1,1}.spectralData);
+    meansOfMeasurements = measurements{1,1};
 end
-
-% calculate luminance 
+assignin('base', 'meansOfMeasurements', meansOfMeasurements);
+set(handles.colorDataText, 'String', {'',meansOfMeasurements.colorimetricData.Lv,...
+    meansOfMeasurements.colorimetricData.X, meansOfMeasurements.colorimetricData.Z,...
+    aperture, mat2str(meansOfMeasurements.timeStamp),Lp,Lm,Ls, '',numMeas});
+set(handles.colorDataNames, 'String', {['[',meansText,']'],colorimetricNames{2},...
+    colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', ...
+    '','Lp', 'Lm', 'Ls', 'Number of ', 'measurements'});    
+set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
+drawnow;
+f = figure('Visible', 'off'); 
+copyobj(handles.axes1, f);  
+%print(f, '-djpeg', '-r0', 'test');
+saveas(f, 'C:\Dokumente und Einstellungen\admin\Eigene Dateien\MATLAB\CS-2000\CS2000\Temp\test', 'png');
 
 
 
@@ -385,8 +405,4 @@ switch user_response
         [~] = CS2000_terminateConnection();
         pause(1);
         delete(handles.figure1)
-end
-
-
-
-  
+end 
