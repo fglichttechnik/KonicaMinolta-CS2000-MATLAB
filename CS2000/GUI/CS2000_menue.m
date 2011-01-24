@@ -207,7 +207,7 @@ pause(0.1);
 numMeas = str2double(get(handles.numberOfMeas, 'String'));
 assignin('base', 'numMeas', numMeas);
 measurements = cell(numMeas,1);
-for i = 1 : numMeas    
+for i = 1 : numMeas 
     % measure
     set(handles.measureText, 'String', ['measuring... ', num2str(i), ...
         '/', num2str(numMeas)]);
@@ -231,7 +231,31 @@ for i = 1 : numMeas
     measuredData.lightSource = get(handles.lightSourceEdit, 'String');
     measurements{i} = measuredData;     
 end
-assignin('base', 'measurements', measurements);
+
+
+% calculate means of measurement data
+if numMeas > 1    
+    set(handles.measureText, 'String', 'Calculating means of measurements...'); 
+    drawnow;
+    meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements);
+    [Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
+    title('Means of Spectral Radiance\fontsize{18}');
+    set(handles.colorDataText, 'String', {'',...
+        meansOfMeasurements.colorimetricData.Lv,...
+        meansOfMeasurements.colorimetricData.X, meansOfMeasurements.colorimetricData.Z,...
+        aperture, mat2str(meansOfMeasurements.timeStamp),Lp,Lm,Ls, '',numMeas});
+    set(handles.colorDataNames, 'String', {'[Means] ', colorimetricNames{2},...
+        colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', ...
+        '','Lp', 'Lm', 'Ls', 'Number of ', 'measurements'});
+    assignin('base', 'measurements', measurements);
+    assignin('base', 'meansOfMeasurements', meansOfMeasurements);
+    set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
+    drawnow;
+end
+
+% calculate luminance 
+
+
 
 
 % --- Executes on button press in normalLightBox.
