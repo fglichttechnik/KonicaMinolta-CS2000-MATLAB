@@ -1,10 +1,13 @@
 # Can ignore specific files
 .DS_Store
+Verknüpfung\n mit\n doxygen.exe
 
 # Use wildcards as well
 *.m~
 *.asv
 
+
 # Can also ignore all directories and files in a directory.
 #tmp/**/*
 CS2000\Temp 
+

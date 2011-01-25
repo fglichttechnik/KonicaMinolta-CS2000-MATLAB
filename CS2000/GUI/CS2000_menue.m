@@ -61,6 +61,7 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+CS2000_rubber(handles);
 message = evalin('base', 'message');
 set(handles.openText, 'String', message);
 filter_value = CS2000_readNDFilter +1;
