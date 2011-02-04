@@ -1,6 +1,9 @@
 function aperture = CS2000_readApertureStop()
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
+%
+%Reads the status of the instrument's aperture stop.
+
 global s
 
 fprintf(s, 'STSR');

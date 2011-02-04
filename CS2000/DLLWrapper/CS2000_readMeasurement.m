@@ -1,14 +1,9 @@
 function [measuredData, colorimetricNames] = CS2000_readMeasurement()
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
-%Function MEDR (Measurement Data Read)
-    %Reads measurement data from instrument.
-    %Data are output as comma-delimited. When measurement button is enabled:
-    %- Reading all 4 blocks of spectral data or reading any set of colorimetric
-    %data clears the measurment data from the instrument's buffer.
-    %- If an error occurs during measurement, the corresponding error-check ist
-    %output but no measurement data are output. When the error-check code ist
-    %read, measurement data are cleared form the instrument's buffer.
+%
+%Reads measurement data from instrument. Reads all 4 blocks of spectral 
+%data and any set of colorimetric data. 
     
 global s
 

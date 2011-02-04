@@ -1,6 +1,14 @@
 function message = CS2000_initConnection(comPort)
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
+%
+% Initiates connection to the instrument.
+% 
+% Input: comPort = port where the instrument is connected via USB. See 
+%                  hardware information on your pc or type in "instrfind"
+%                  in your command window.
+% Output: message = string with information about success or error.
+
 global s
 
 a = exist('Temp', 'dir');

@@ -1,6 +1,14 @@
 function message = CS2000_readBacklight()
 %author Sandy Buschmann, Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
+%
+%Reads the setting of control of external display backlight during
+%measurement.
+% 
+%Output: message = string containing information of the backlight mode that
+%                  has been set.
+
+
 global s 
 
 fprintf(s, 'BALR');
