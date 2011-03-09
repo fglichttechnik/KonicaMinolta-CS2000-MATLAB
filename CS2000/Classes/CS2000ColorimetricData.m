@@ -1,10 +1,12 @@
 %author Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
 
-classdef CS2000ColorimetricData
+classdef CS2000ColorimetricData < handle
     properties
         Le
         Lv
+        Lv_mesopic
+        Lv_scotopic
         X
         Y
         Z
@@ -27,11 +29,12 @@ classdef CS2000ColorimetricData
         delta_uv10
         lambda_d10
         Pe10
+        spectralData    %needed for Lv_mesopic / Lv_scotopic
     end % properties
     methods
         %constructor
         function obj = CS2000ColorimetricData(colorArray)
-            if nargin > 0 % Support calling with 0 arguments          
+            if nargin > 0 % Support calling with 0 arguments
                 obj.Le = colorArray{1};
                 obj.Lv = colorArray{2};
                 obj.X = colorArray{3};
@@ -58,5 +61,34 @@ classdef CS2000ColorimetricData
                 obj.Pe10 = colorArray{24};
             end
         end % constructor
+        function value = get.Lv_mesopic(obj)
+            if (isempty(obj.Lv_mesopic))
+                [obj.Lv_mesopic, ~] = ...
+                    mesopicLuminance_recommended(obj.Lv,...
+                    obj.Lv_scotopic);
+            end
+            value = obj.Lv_mesopic;
+        end%lazy loading of scotopic data
+        function value = get.Lv_scotopic(obj)
+            if (isempty(obj.Lv_scotopic))
+                obj.Lv_scotopic = ...
+                    calcScotopicLuminanceFromSpectrum(obj);
+            end
+            value = obj.Lv_scotopic;
+        end%lazy loading of scotopic data
+    end
+    methods ( Access = private )
+        %%calc scotopic luminance
+        function Lv_scotopic = calcScotopicLuminanceFromSpectrum(obj)
+            load 'V_strich_CIE.mat'  %load V_strich and lambda_CIE
+            lambda_i = calcCS2000Lambda(obj);
+            V_strich_i=interp1(lambda_CIE, V_strich, lambda_i);
+            Lv_scotopic = 1758 * sum(V_strich_i .* obj.spectralData);
+        end
+        %%lambda for CS2000
+        function lambda = calcCS2000Lambda(obj)
+            lambda = linspace(380,780,401);
+        end
+        
     end % methods
 end

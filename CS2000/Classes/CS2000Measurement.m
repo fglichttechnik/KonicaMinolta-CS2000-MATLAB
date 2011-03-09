@@ -1,7 +1,7 @@
 %author Jan Winter TU Berlin
 %email j.winter@tu-berlin.de
 
-classdef CS2000Measurement
+classdef CS2000Measurement < handle
     properties
         timeStamp
         spectralData
@@ -34,5 +34,21 @@ classdef CS2000Measurement
             title('Spectral Radiance');
             axis('tight');
         end % plot
+        %%custom colorimetricData getter
+        %we need this in order to make sure, that colorimetric data has
+        %access to spectral data for mesopic calculation
+        function value = get.colorimetricData(obj)
+            if(isempty(obj.colorimetricData))
+                obj.colorimetricData = CS2000ColorimetricData();
+            end
+            if (isempty(obj.colorimetricData.spectralData))
+                obj.colorimetricData.spectralData = obj.spectralData;                  
+            end
+            value = obj.colorimetricData;
+        end%lazy loading of scotopic data
+        %%lambda for CS2000
+        function lambda = calcCS2000Lambda
+            lambda = linspace(380,780,401);
+        end
     end % methods
 end

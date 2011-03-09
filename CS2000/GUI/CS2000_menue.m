@@ -24,7 +24,7 @@ function varargout = CS2000_menue(varargin)
 
 % Edit the above text to modify the response to help CS2000_menue
 
-% Last Modified by GUIDE v2.5 01-Oct-2010 18:12:13
+% Last Modified by GUIDE v2.5 24-Jan-2011 16:46:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,6 +61,7 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+CS2000_rubber(handles);
 message = evalin('base', 'message');
 set(handles.openText, 'String', message);
 filter_value = CS2000_readNDFilter +1;
@@ -104,24 +105,109 @@ end
 save(file_name, 'measurements');
 
 % --------------------------------------------------------------------
+function savePlot_Callback(hObject, eventdata, handles)
+% hObject    handle to savePlot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+CS2000_chosePath;
+uiwait(CS2000_chosePath);
+file_name = evalin('base', 'file_name');
+f = figure('Visible', 'off'); 
+copyobj(handles.axes1, f);  
+saveas(f, file_name, 'epsc');
+saveas(f, file_name, 'fig');
+
+
+% --------------------------------------------------------------------
 function exit_menue_Callback(hObject, eventdata, handles)
 % hObject    handle to exit_menue (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg('Close this figure and terminate connection?',...
+user_response = questdlg('Close CS2000 menu and terminate connection?',...
       'Close Request Function',...
-      'Yes','No','Yes'); 
-   switch selection, 
-      case 'Yes',
-        message = CS2000_terminateConnection();
-        set(handles.openText, 'String', message); 
-        pause(2);
-        delete(hObject);
-        evalin('base', 'clear');
-        delete(gcf)        
-      case 'No'
-      return 
-   end
+      'Yes','No','No'); 
+switch user_response
+    case {'No'}
+        % take no action
+    case 'Yes'
+        % Prepare to close GUI application window
+        guidata(hObject, handles);
+        pause(1);
+        [~] = CS2000_terminateConnection();
+        pause(1);
+        delete(handles.figure1)
+end
+
+% --------------------------------------------------------------------
+function storedMeasurements_Callback(hObject, eventdata, handles)
+% hObject    handle to storedMeasurements (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+checkfilename = 1;
+while checkfilename == 1
+    CS2000_storedMeasurementFig;
+    uiwait(CS2000_storedMeasurementFig);
+    dir_name = evalin('base', 'dir_name');
+    delete_check = evalin('base', 'delete_check');
+
+    if ~(isempty(dir_name)) %save data      
+        file_name = evalin('base', 'file_name');
+        filename = [dir_name, '\', file_name, '.mat'];          
+        if ~(exist(filename))
+            checkreading = 1;                
+            checkfilename = 0;
+        else
+            disp('Sorry, file already exists');
+                % Construct a questdlg with two options
+                choice = questdlg('File already exists. Overwrite?', ...
+                'Save Menu', ...
+                'YES','NO, type in another filename', 'NO, type in another filename');
+                % Handle response
+                switch choice
+                    case 'YES'
+                        checkreading = 1;                            
+                        checkfilename = 0;
+                    case 'NO, type in another filename'
+                        checkreading = 0;
+                        checkfilename = 1;                    
+                    otherwise
+                        checkreading = 0;
+                        checkfilename = 1;
+                end       
+        end               
+        
+        if checkreading == 1
+            %get measurement object from camera:
+            text = 'Reading...';
+            set(handles.measureText, 'String', text);
+            disp(text);
+            drawnow;
+            [text, CS2000_allMeasurements] = CS2000_readStoredMeasurement();
+            set(handles.measureText, 'String', text);
+            disp(text);
+            drawnow;
+            %save object
+            if ~(isempty(CS2000_allMeasurements))
+                save(filename, 'CS2000_allMeasurements');
+                pause(0.1);
+                text = '.mat has been saved!';
+                set(handles.measureText, 'String', text);
+                disp(text);
+                pause(0.1);
+            else
+                set(handles.measureText, 'String', text);
+                disp(text);
+                pause(0.1);
+            end
+        end
+    elseif ~(isempty(delete_check)) %delete data
+        checkfilename = 0;
+        if delete_check == 1
+            text = CS2000_deleteStoredMeasurements();
+            set(handles.measureText, 'String', text);
+        end
+    end
+end
 % --------------------------------------------------------------------
 % --------------------------------------------------------------------
 
@@ -136,9 +222,10 @@ pause(0.1);
 numMeas = str2double(get(handles.numberOfMeas, 'String'));
 assignin('base', 'numMeas', numMeas);
 measurements = cell(numMeas,1);
-for i = 1 : numMeas    
+for i = 1 : numMeas 
     % measure
-    set(handles.measureText, 'String', 'measuring...');
+    set(handles.measureText, 'String', ['measuring... ', num2str(i), ...
+        '/', num2str(numMeas)]);
     pause(0.1);
     [message1, message2, measuredData, colorimetricNames] = CS2000_measure();
     aperture = CS2000_readApertureStop;
@@ -150,16 +237,46 @@ for i = 1 : numMeas
 
     set(handles.colorDataText, 'String', {measuredData.colorimetricData.Lv,...
         measuredData.colorimetricData.X, measuredData.colorimetricData.Z,...
-        aperture, mat2str(measuredData.timeStamp)});
+        aperture, mat2str(measuredData.timeStamp), '',numMeas});
     set(handles.colorDataNames, 'String', {colorimetricNames{2},...
-        colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time'});
+        colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', '','Number of ', 'measurements'});
     pause(0.1);
     % create objects
     measuredData.comments = get(handles.commentsEdit, 'String');
     measuredData.lightSource = get(handles.lightSourceEdit, 'String');
-    measurements{i} = measuredData;     
+    measurements{i} = measuredData;    
+    assignin('base', 'measurements', measurements);
 end
-assignin('base', 'measurements', measurements);
+
+
+% calculate means of measurement data
+if numMeas > 1  
+    meansText = 'means';
+    set(handles.measureText, 'String', 'Calculating means of measurements...'); 
+    drawnow;
+    meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements);    
+    [Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
+    title([meansText,' of Spectral Radiance\fontsize{18}']);    
+else
+    meansText = '';
+    [Lp, Lm, Ls] = calcLuminance(measurements{1,1}.spectralData);
+    meansOfMeasurements = measurements{1,1};
+end
+assignin('base', 'meansOfMeasurements', meansOfMeasurements);
+set(handles.colorDataText, 'String', {'',meansOfMeasurements.colorimetricData.Lv,...
+    meansOfMeasurements.colorimetricData.X, meansOfMeasurements.colorimetricData.Z,...
+    aperture, mat2str(meansOfMeasurements.timeStamp),Lp,Lm,Ls, '',numMeas});
+set(handles.colorDataNames, 'String', {['[',meansText,']'],colorimetricNames{2},...
+    colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', ...
+    '','Lp', 'Lm', 'Ls', 'Number of ', 'measurements'});    
+set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
+drawnow;
+f = figure('Visible', 'off'); 
+copyobj(handles.axes1, f);  
+%print(f, '-djpeg', '-r0', 'test');
+saveas(f, 'C:\Dokumente und Einstellungen\admin\Eigene Dateien\MATLAB\CS-2000\CS2000\Temp\test', 'png');
+
+
 
 
 % --- Executes on button press in normalLightBox.
@@ -169,10 +286,11 @@ function normalLightBox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if (get(handles.normalLightBox,'Value') == get(hObject,'Max')) 
-	setBacklight(0,0);
+	message = CS2000_setBacklight(1,0);
 else
-    setBacklight(1,1);
+    message = CS2000_setBacklight(1,1);
 end
+set(handles.measureText, 'String', message);
 
 
 
@@ -275,17 +393,17 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg('Close this figure and terminate connection?',...
+user_response = questdlg('Close CS2000 menu and terminate connection?',...
       'Close Request Function',...
-      'Yes','No','Yes'); 
-   switch selection, 
-      case 'Yes',
-        message = CS2000_terminateConnection();
-        set(handles.openText, 'String', message); 
-        pause(2);
-        delete(hObject);
-        evalin('base', 'clear');
-        delete(gcf)        
-      case 'No'
-      return 
-   end
+      'Yes','No','No'); 
+switch user_response
+    case {'No'}
+        % take no action
+    case 'Yes'
+        % Prepare to close GUI application window
+        guidata(hObject, handles);
+        pause(1);
+        [~] = CS2000_terminateConnection();
+        pause(1);
+        delete(handles.figure1)
+end 
