@@ -27,9 +27,11 @@ classdef CS2000Measurement
             elseif nargin == 2
                 semilogy(lambda, obj.spectralData, varargin{:});
             end
-            xlabel('\lambda in nm\fontsize{18}');
-            ylabel('L_{e}(\lambda) in W / m^{2} sr nm\fontsize{18}');
-            title('Spectral Radiance\fontsize{18}');
+            x = xlabel('\lambda in nm');
+            set(x,'FontSize',12);
+            y = ylabel('$$L_{e}(\lambda) \hspace{10pt} in \hspace{10pt} \frac{W}{m^{2}\hspace{5pt} sr \hspace{5pt}nm}$$');
+            set(y,'Interpreter','LaTeX','FontSize',12);
+            title('Spectral Radiance');
             axis('tight');
         end % plot
     end % methods
