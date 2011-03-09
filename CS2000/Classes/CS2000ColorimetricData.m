@@ -5,6 +5,8 @@ classdef CS2000ColorimetricData
     properties
         Le
         Lv
+        Lv_mes
+        Lv_skot
         X
         Y
         Z
