@@ -29,7 +29,7 @@ classdef CS2000Measurement < handle
             end
             x = xlabel('\lambda in nm');
             set(x,'FontSize',12);
-            y = ylabel('$$L_{e}(\lambda) \hspace{10pt} in \hspace{10pt} \frac{W}{m^{2}\hspace{5pt} sr \hspace{5pt}nm}$$');
+            y = ylabel('$$\mbox{L}_{e}(\lambda) \hspace{10pt} \mbox{in} \hspace{10pt} \frac{W}{m^{2}\hspace{5pt} sr \hspace{5pt}nm}$$');
             set(y,'Interpreter','LaTeX','FontSize',12);
             title('Spectral Radiance');
             axis('tight');

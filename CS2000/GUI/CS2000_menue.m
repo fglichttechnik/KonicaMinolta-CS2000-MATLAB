@@ -255,20 +255,21 @@ if numMeas > 1
     set(handles.measureText, 'String', 'Calculating means of measurements...'); 
     drawnow;
     meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements);    
-    [Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
+    %[Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
     title([meansText,' of Spectral Radiance\fontsize{18}']);    
 else
     meansText = '';
-    [Lp, Lm, Ls] = calcLuminance(measurements{1,1}.spectralData);
+    %[Lp, Lm, Ls] = calcLuminance(measurements{1,1}.spectralData);
     meansOfMeasurements = measurements{1,1};
 end
 assignin('base', 'meansOfMeasurements', meansOfMeasurements);
 set(handles.colorDataText, 'String', {'',meansOfMeasurements.colorimetricData.Lv,...
+    meansOfMeasurements.colorimetricData.Lv_mesopic,meansOfMeasurements.colorimetricData.Lv_scotopic,...
     meansOfMeasurements.colorimetricData.X, meansOfMeasurements.colorimetricData.Z,...
-    aperture, mat2str(meansOfMeasurements.timeStamp),Lp,Lm,Ls, '',numMeas});
-set(handles.colorDataNames, 'String', {['[',meansText,']'],colorimetricNames{2},...
-    colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', ...
-    '','Lp', 'Lm', 'Ls', 'Number of ', 'measurements'});    
+    aperture, datestr(meansOfMeasurements.timeStamp), '',numMeas});
+set(handles.colorDataNames, 'String', {['[',meansText,']'],'Lv',...
+     'Lv_mesopic', 'Lv_scotopic','X', 'Z', 'Aperture', 'Time', ...
+    '', 'Number of ', 'measurements'});    
 set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
 drawnow;
 f = figure('Visible', 'off'); 
