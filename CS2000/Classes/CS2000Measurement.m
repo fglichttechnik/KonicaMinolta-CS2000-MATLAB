@@ -28,7 +28,7 @@ classdef CS2000Measurement < handle
                 semilogy(lambda, obj.spectralData, varargin{:});
             end
             x = xlabel('\lambda in nm');
-            set(x,'FontSize',14);
+			set(x,'FontSize',14);
             y = ylabel('$$\mbox{L}_{e}(\lambda) \hspace{5pt} \mbox{in} \hspace{5pt}  \frac{\mbox{W}}{\mbox{m}^{2} \hspace{3pt} \mbox{sr} \hspace{3pt} \mbox{nm}}$$');
             set(y,'Interpreter','LaTeX','FontSize',14);
             t = title('Spectral Radiance\fontsize{18}');
