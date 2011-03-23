@@ -76,6 +76,22 @@ classdef CS2000ColorimetricData < handle
             end
             value = obj.Lv_scotopic;
         end%lazy loading of scotopic data
+         %% get spectralData
+        function value = get.spectralData(obj)
+            if (iscell(obj.spectralData))
+                value = cell2mat(obj.spectralData);
+            else
+                value = obj.spectralData;
+            end
+        end%set reflectedSpectrum
+         %% set spectralData
+        function set.spectralData(obj, value)
+            if (iscell(value))
+                obj.spectralData = cell2mat(value);
+            else
+                obj.spectralData = value;
+            end
+        end%set reflectedSpectrum
     end
     methods ( Access = private )
         %%calc scotopic luminance
