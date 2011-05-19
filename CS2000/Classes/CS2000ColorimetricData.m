@@ -63,7 +63,7 @@ classdef CS2000ColorimetricData < handle
         end % constructor
         function value = get.Lv_mesopic(obj)
             if (isempty(obj.Lv_mesopic))
-                [obj.Lv_mesopic, ~] = ...
+                [obj.Lv_mesopic, unneededImage] = ...
                     mesopicLuminance_recommended(obj.Lv,...
                     obj.Lv_scotopic);
             end
@@ -99,7 +99,7 @@ classdef CS2000ColorimetricData < handle
             load 'V_strich_CIE.mat'  %load V_strich and lambda_CIE
             lambda_i = calcCS2000Lambda(obj);
             V_strich_i=interp1(lambda_CIE, V_strich, lambda_i);
-            Lv_scotopic = 1758 * sum(V_strich_i .* obj.spectralData);
+            Lv_scotopic = 1699 * sum(V_strich_i .* obj.spectralData);
         end
         %%lambda for CS2000
         function lambda = calcCS2000Lambda(obj)
