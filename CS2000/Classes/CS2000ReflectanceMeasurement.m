@@ -59,15 +59,18 @@ classdef CS2000ReflectanceMeasurement < handle
         function plotSpectrum(obj,varargin)
             lambda = linspace(380,780,length(obj.reflectedSpectrum));
             if nargin == 1            
-                semilogy(lambda, obj.reflectedSpectrum);
+                y = semilogy(lambda, obj.reflectedSpectrum);
             elseif nargin == 2
-                semilogy(lambda, obj.reflectedSpectrum, varargin{:});
+                y = semilogy(lambda, obj.reflectedSpectrum, varargin{:});
             end
+            LINEWIDTH = 1.2;
+            set(y, 'LineWidth', LINEWIDTH);
             x = xlabel('\lambda in nm');
             set(x,'FontSize',14);
             y = ylabel('$$\mbox{L}_{e}(\lambda) \hspace{5pt} \mbox{in} \hspace{5pt}  \frac{\mbox{W}}{\mbox{m}^{2} \hspace{3pt} \mbox{sr} \hspace{3pt} \mbox{nm}}$$');
             set(y,'Interpreter','LaTeX','FontSize',12);
-            titleString = strcat({'Spectral Radiance '},obj.name,'\fontsize{14}');
+            titleString = strcat({'Spectral Radiance '},'\fontsize{14}');
+            legend(obj.name, 'Location', 'SouthEast');
             t = title(titleString);
             set(t,'FontSize',14);
             
@@ -90,10 +93,13 @@ classdef CS2000ReflectanceMeasurement < handle
         function plotReflectance(obj,varargin)
             lambda = linspace(380,780,length(obj.reflectance));
             if nargin == 1            
-                semilogy(lambda, obj.reflectance);
+                y = semilogy(lambda, obj.reflectance);
             elseif nargin == 2
-                semilogy(lambda, obj.reflectance, varargin{:});
+                y = semilogy(lambda, obj.reflectance, varargin{:});
             end
+            LINEWIDTH = 1.2;
+            set(y,'LineWidth',LINEWIDTH);
+            
             xlabel('\lambda in nm\fontsize{18}');
             y = ylabel('$$\rho(\lambda) = \frac{\mbox{L}_{e, object}\hspace{8pt}(\lambda)}{\mbox{L}_{e, source}\hspace{8pt}(\lambda)}$$');
             set(y,'Interpreter','LaTeX','FontSize',12);

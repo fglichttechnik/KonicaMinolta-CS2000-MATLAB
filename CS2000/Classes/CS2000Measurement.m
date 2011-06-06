@@ -23,10 +23,13 @@ classdef CS2000Measurement < handle
         function plot(obj,varargin)
             lambda = linspace(380,780,length(obj.spectralData));
             if nargin == 1            
-                semilogy(lambda, obj.spectralData);
+                y = semilogy(lambda, obj.spectralData);
             elseif nargin == 2
-                semilogy(lambda, obj.spectralData, varargin{:});
+                y = semilogy(lambda, obj.spectralData, varargin{:});
             end
+            LINEWIDTH = 1.2;
+            set(y,'LineWidth',LINEWIDTH);
+            
             x = xlabel('\lambda in nm');
 			set(x,'FontSize',14);
             y = ylabel('$$\mbox{L}_{e}(\lambda) \hspace{5pt} \mbox{in} \hspace{5pt}  \frac{\mbox{W}}{\mbox{m}^{2} \hspace{3pt} \mbox{sr} \hspace{3pt} \mbox{nm}}$$');

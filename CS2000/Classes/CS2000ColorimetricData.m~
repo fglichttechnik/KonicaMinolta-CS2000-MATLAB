@@ -30,7 +30,6 @@ classdef CS2000ColorimetricData < handle
         lambda_d10
         Pe10
         spectralData    %needed for Lv_mesopic / Lv_scotopic
-        SP %S to P ratio
     end % properties
     methods
         %constructor
@@ -104,10 +103,6 @@ classdef CS2000ColorimetricData < handle
                 obj.spectralData = value;
             end
         end%set reflectedSpectrum
-        %% get SP
-        function value = get.SP(obj)
-            value = obj.Lv_scotopic / obj.Lv;            
-        end
     end
     methods ( Access = private )
         %%calc scotopic luminance
@@ -118,11 +113,11 @@ classdef CS2000ColorimetricData < handle
             Lv_scotopic = 1699 * sum(V_strich_i .* obj.spectralData);
         end
         %%calc photopic luminance
-        function Lv_photopic = calcPhotopicLuminanceFromSpectrum(obj)
-            load 'V_CIE.mat'  %load V_strich and lambda_CIE
+        function Lv_scotopic = calcPhotopicLuminanceFromSpectrum(obj)
+            load 'V_strich_CIE.mat'  %load V_strich and lambda_CIE
             lambda_i = calcCS2000Lambda(obj);
             V_i=interp1(lambda_CIE, V, lambda_i);
-            Lv_photopic = 683 * sum(V_i .* obj.spectralData);
+            Lv_photopic = 1699 * sum(V_i .* obj.spectralData);
         end
         %%lambda for CS2000
         function lambda = calcCS2000Lambda(obj)
