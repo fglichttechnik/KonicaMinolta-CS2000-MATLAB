@@ -104,10 +104,12 @@ classdef CS2000ColorimetricData < handle
                 obj.spectralData = value;
             end
         end%set reflectedSpectrum
-        %% get SP
         function value = get.SP(obj)
-            value = obj.Lv_scotopic / obj.Lv;            
-        end
+            if (ismepty(obj.SP))
+                obj.SP = obj.Lv_scotopic / obj.Lv;
+            end
+            return obj.SP;
+        end%set reflectedSpectrum
     end
     methods ( Access = private )
         %%calc scotopic luminance
