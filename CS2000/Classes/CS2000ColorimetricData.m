@@ -30,6 +30,7 @@ classdef CS2000ColorimetricData < handle
         lambda_d10
         Pe10
         spectralData    %needed for Lv_mesopic / Lv_scotopic
+        SP
     end % properties
     methods
         %constructor
@@ -91,6 +92,12 @@ classdef CS2000ColorimetricData < handle
             else
                 obj.spectralData = value;
             end
+        end%set reflectedSpectrum
+        function value = get.SP(obj)
+            if (ismepty(obj.SP))
+                obj.SP = obj.Lv_scotopic / obj.Lv;
+            end
+            return obj.SP;
         end%set reflectedSpectrum
     end
     methods ( Access = private )
