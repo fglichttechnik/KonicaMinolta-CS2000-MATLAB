@@ -16,10 +16,17 @@ function [message1, message2, measuredData, colorimetricNames] =  CS2000_measure
 
 
 global s
-    
+  
+createTMPFolderIfNecessary();
+ERROR_OCCURRED = 0; % flag is set when error occured  
+
+message1 = '';
+message2 = '';
+
 % ------------------------start measurement-------------------------------
 fprintf(s,'MEAS,1');
 answer = fscanf(s);                 
+
 
 fid = fopen('Temp\answers.tmp', 'w');
 fprintf(fid, answer);
@@ -30,7 +37,7 @@ fclose(fid);
 
 if tf == 1
     message1 = 'Pre-Measurement has been completed.';
-    message2 = ['Pre-Measurement time was: ',num2str(PreMeasTime),' seconds.'];
+    message2 = sprintf( 'Pre-Measurement time was: %s seconds.', num2str(PreMeasTime) );
     ErrorCheckCode = fscanf(s,'%s');
     [tf, errOutput] = CS2000_errMessage(ErrorCheckCode);
 
@@ -86,7 +93,12 @@ for n = 1:4
     p = p+100;
 end
 
-spectralData = cell2mat(spectralData);
+if ( ~ischar( spectralData ) )
+    spectralData = cell2mat( spectralData );
+else
+    ERROR_OCCURRED = 1;
+    disp( sprintf( 'error reading spectral data: %s', spectralData ) );
+end
 
 
 %------------------------Read Colorimetric data:----------------------------
@@ -121,16 +133,24 @@ end
 
 
 %create CS2000Measurement object:
-measuredData = CS2000Measurement(clock, spectralData, colorimetricData);
-colorimetricNames = properties(measuredData.colorimetricData);
-
+if ( ~ERROR_OCCURRED )
+    measuredData = CS2000Measurement(clock, spectralData, colorimetricData);
+    colorimetricNames = properties(measuredData.colorimetricData);
+else
+    measuredData = CS2000Measurement();
+    colorimetricNames = [];
+end
 
 %-----------------------Plot all spectral data:---------------------------
-plot(measuredData);
+%plot(measuredData);
 
 
 end
 
-
+function createTMPFolderIfNecessary()
+    if ( ~ exist( 'Temp', 'dir' ) )
+        mkdir( 'Temp' );
+    end
+end
 
 

@@ -108,7 +108,7 @@ classdef CS2000ColorimetricData < handle
             if (ismepty(obj.SP))
                 obj.SP = obj.Lv_scotopic / obj.Lv;
             end
-            return obj.SP;
+            value = obj.SP;
         end%set reflectedSpectrum
     end
     methods ( Access = private )
