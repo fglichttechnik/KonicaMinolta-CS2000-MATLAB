@@ -217,6 +217,7 @@ function startMeasure_Callback(hObject, eventdata, handles)
 % hObject    handle to startMeasure (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global path
 CS2000_rubber(handles); 
 pause(0.1);
 numMeas = str2double(get(handles.numberOfMeas, 'String'));
@@ -246,6 +247,7 @@ for i = 1 : numMeas
     measuredData.lightSource = get(handles.lightSourceEdit, 'String');
     measurements{i} = measuredData;    
     assignin('base', 'measurements', measurements);
+    measuredData.plot( );
 end
 
 
@@ -271,11 +273,12 @@ set(handles.colorDataNames, 'String', {['[',meansText,']'],'Lv',...
      'Lv_mesopic', 'Lv_scotopic','X', 'Z', 'Aperture', 'Time', ...
     '', 'Number of ', 'measurements'});    
 set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
+meansOfMeasurements.plot( );
 drawnow;
 f = figure('Visible', 'off'); 
 copyobj(handles.axes1, f);  
 %print(f, '-djpeg', '-r0', 'test');
-saveas(f, 'C:\Dokumente und Einstellungen\admin\Eigene Dateien\MATLAB\CS-2000\CS2000\Temp\test', 'png');
+saveas(f, [path, '\Temp\test'], 'png');
 
 
 

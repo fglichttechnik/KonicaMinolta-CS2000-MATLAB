@@ -21,8 +21,9 @@ path = pwd;
 
 CS2000_choseCom;
 uiwait(CS2000_choseCom);
-
-CS2000_menue;
-% uiwait(CS2000_menue);
-% rmdir('Temp');
-% clear;
+message = evalin( 'base', 'message' );
+if ~(strcmp( message, 'Sorry, no connection.'))
+    CS2000_menue;
+else
+    disp('CS-2000 not connected.');
+end
