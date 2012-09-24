@@ -15,7 +15,7 @@ if nargin == 0
     comPort = 'COM4';
 end
 
-a = exist('Temp', 'dir');
+a = exist([path, '/Temp'], 'dir');
 if a ~= 7
     [success, mess, messid] = mkdir('Temp');
     if success == 0    

@@ -16,8 +16,8 @@ function [message1, message2, measuredData, colorimetricNames] =  CS2000_measure
 
 
 global s
-if exist( [pwd, 'Temp'], 'dir' ) ~= 7
-    [ a, mess, messid ] = mkdir( [pwd, 'Temp'] )
+if exist( [pwd, '/Temp'], 'dir' ) ~= 7
+    [ a, mess, messid ] = mkdir( [pwd, '/Temp'] )
     disp('Created Temp folder');
 end
 ERROR_OCCURRED = 0; % flag is set when error occured  
