@@ -16,8 +16,10 @@ function [message1, message2, measuredData, colorimetricNames] =  CS2000_measure
 
 
 global s
-  
-createTMPFolderIfNecessary();
+if exist( [pwd, '/Temp'], 'dir' ) ~= 7
+    [ a, mess, messid ] = mkdir( [pwd, '/Temp'] )
+    disp('Created Temp folder');
+end
 ERROR_OCCURRED = 0; % flag is set when error occured  
 
 message1 = '';
@@ -141,16 +143,11 @@ else
     colorimetricNames = [];
 end
 
+
 %-----------------------Plot all spectral data:---------------------------
 %plot(measuredData);
 
 
-end
-
-function createTMPFolderIfNecessary()
-    if ( ~ exist( 'Temp', 'dir' ) )
-        mkdir( 'Temp' );
-    end
 end
 
 

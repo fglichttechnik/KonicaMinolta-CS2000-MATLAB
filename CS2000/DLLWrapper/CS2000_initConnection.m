@@ -11,7 +11,11 @@ function message = CS2000_initConnection(comPort)
 
 global s
 
-a = exist('Temp', 'dir');
+if nargin == 0
+    comPort = 'COM4';
+end
+
+a = exist([path, '/Temp'], 'dir');
 if a ~= 7
     [success, mess, messid] = mkdir('Temp');
     if success == 0    
@@ -25,30 +29,39 @@ if length(instrfind) > 0
     delete(instrfind);
 end
    
-if(nargin == 0)
-    s = serial('COM4');
-else
+try
     s = serial(comPort);
-end    
     
-s.Terminator = 'LF'; 
-s.InputBufferSize = 1024;
-s.BytesAvailableFcnMode = 'terminator'; 
-s.BytesAvailableFcn = @instrcallback;
-s.Timeout = 240;
+    s.Terminator = 'LF'; 
+    s.InputBufferSize = 1024;
+    s.BytesAvailableFcnMode = 'terminator'; 
+    s.BytesAvailableFcn = @instrcallback;
+    s.Timeout = 240;
 
-fopen(s);
-fprintf(s,'RMTS,1');
-ErrorCheckCode = fscanf(s);                   
-[tf, errOutput] = CS2000_errMessage(ErrorCheckCode); 
+    fopen(s);
+    fprintf(s,'RMTS,1');
+    ErrorCheckCode = fscanf(s);                   
+    [tf, errOutput] = CS2000_errMessage(ErrorCheckCode); 
+
+    if tf == 1
+        message = 'connected';    
+    else
+        message = errOutput;   
+    end
+    disp(message);
     
-if tf == 1
-    message = 'connected';    
-else
-    message = errOutput;   
+catch err
+    disp(err.message)
+    message = 'Sorry, no connection.';
+    disp('Please chose another COM or make sure that instrument is connected.');    
 end
-disp(message);
-end   
+   
+    
+
+     
+
+end
+  
 
 
 
