@@ -24,7 +24,7 @@ function varargout = CS2000_menue(varargin)
 
 % Edit the above text to modify the response to help CS2000_menue
 
-% Last Modified by GUIDE v2.5 16-Dec-2010 15:22:52
+% Last Modified by GUIDE v2.5 27-Sep-2012 16:35:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,6 +61,7 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+CS2000_rubber(handles);
 message = evalin('base', 'message');
 set(handles.openText, 'String', message);
 filter_value = CS2000_readNDFilter +1;
@@ -102,6 +103,20 @@ for i = 1 : numMeas
     measurements{i}.lightSource = get(handles.lightSourceEdit, 'String');
 end
 save(file_name, 'measurements');
+
+% --------------------------------------------------------------------
+function savePlot_Callback(hObject, eventdata, handles)
+% hObject    handle to savePlot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+CS2000_chosePath;
+uiwait(CS2000_chosePath);
+file_name = evalin('base', 'file_name');
+f = figure('Visible', 'off'); 
+copyobj(handles.axes1, f);  
+saveas(f, file_name, 'epsc');
+saveas(f, file_name, 'fig');
+
 
 % --------------------------------------------------------------------
 function exit_menue_Callback(hObject, eventdata, handles)
@@ -202,6 +217,7 @@ function startMeasure_Callback(hObject, eventdata, handles)
 % hObject    handle to startMeasure (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global path
 CS2000_rubber(handles); 
 pause(0.1);
 numMeas = str2double(get(handles.numberOfMeas, 'String'));
@@ -231,6 +247,7 @@ for i = 1 : numMeas
     measuredData.lightSource = get(handles.lightSourceEdit, 'String');
     measurements{i} = measuredData;    
     assignin('base', 'measurements', measurements);
+    measuredData.plot( );
 end
 
 
@@ -240,24 +257,28 @@ if numMeas > 1
     set(handles.measureText, 'String', 'Calculating means of measurements...'); 
     drawnow;
     meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements);    
-    [Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
+    %[Lp, Lm, Ls] = calcLuminance(meansOfMeasurements.spectralData);
     title([meansText,' of Spectral Radiance\fontsize{18}']);    
 else
     meansText = '';
-    [Lp, Lm, Ls] = calcLuminance(measurements{1,1}.spectralData);
+    %[Lp, Lm, Ls] = calcLuminance(measurements{1,1}.spectralData);
     meansOfMeasurements = measurements{1,1};
 end
 assignin('base', 'meansOfMeasurements', meansOfMeasurements);
 set(handles.colorDataText, 'String', {'',meansOfMeasurements.colorimetricData.Lv,...
+    meansOfMeasurements.colorimetricData.Lv_mesopic,meansOfMeasurements.colorimetricData.Lv_scotopic,...
     meansOfMeasurements.colorimetricData.X, meansOfMeasurements.colorimetricData.Z,...
-    aperture, mat2str(meansOfMeasurements.timeStamp),Lp,Lm,Ls, '',numMeas});
-set(handles.colorDataNames, 'String', {['[',meansText,']'],colorimetricNames{2},...
-    colorimetricNames{3}, colorimetricNames{5}, 'Aperture', 'Time', ...
-    '','Lp', 'Lm', 'Ls', 'Number of ', 'measurements'});    
+    aperture, datestr(meansOfMeasurements.timeStamp), '',numMeas});
+set(handles.colorDataNames, 'String', {['[',meansText,']'],'Lv',...
+     'Lv_mesopic', 'Lv_scotopic','X', 'Z', 'Aperture', 'Time', ...
+    '', 'Number of ', 'measurements'});    
 set(handles.measureText, 'String', ['Showing means of ', num2str(numMeas), ' measurements.']); 
+meansOfMeasurements.plot( );
 drawnow;
-print(gcf, 
-% saveas(gcf, 'C:\Dokumente und Einstellungen\admin\Eigene Dateien\MATLAB\CS-2000\CS2000\Temp\test', 'png');
+f = figure('Visible', 'off'); 
+copyobj(handles.axes1, f);  
+%print(f, '-djpeg', '-r0', 'test');
+saveas(f, [path, '\Temp\test'], 'png');
 
 
 
@@ -389,8 +410,19 @@ switch user_response
         [~] = CS2000_terminateConnection();
         pause(1);
         delete(handles.figure1)
+end 
+
+
+% --------------------------------------------------------------------
+function changePlotScaleLog_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set();
 end
 
-
-
-  
+function changePlotScaleLinear_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end

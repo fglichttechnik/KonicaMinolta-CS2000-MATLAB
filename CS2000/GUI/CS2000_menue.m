@@ -24,7 +24,7 @@ function varargout = CS2000_menue(varargin)
 
 % Edit the above text to modify the response to help CS2000_menue
 
-% Last Modified by GUIDE v2.5 24-Jan-2011 16:46:26
+% Last Modified by GUIDE v2.5 27-Sep-2012 16:35:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -411,3 +411,19 @@ switch user_response
         pause(1);
         delete(handles.figure1)
 end 
+
+
+% --------------------------------------------------------------------
+function changePlotScaleLog_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set( gca, 'YScale', 'log' );
+
+
+function changePlotScaleLinear_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set( gca, 'YScale', 'lin' );
+
