@@ -43,13 +43,13 @@ classdef CS2000Measurement < handle
             posY3 = meani - (maxi - mini) / 10;
             posY2 = meani;
             posY1 = meani + (maxi - mini) / 10;
-            tx = text(600,posY1,sprintf('$$L = %1000.3f cd/m^2$$',obj.colorimetricData.Lv));
-            set(tx,'Interpreter','LaTeX','FontSize',12);
-            tx = text(600,posY2,sprintf('$$L_{mes} = %1000.3f cd/m^2$$',obj.colorimetricData.Lv_mesopic));
-            set(tx,'Interpreter','LaTeX','FontSize',12);
-            tx = text(600,posY3,sprintf('$$CCT = %d K$$',obj.colorimetricData.T));
-            %tx = text(600,obj.reflectedSpectrum(220),sprintf('$$\mbox{L} = %d \frac{\mbox{cd}}{\mbox{m}^2}$$',obj.reflectedColorimetricData.Lv));
-            set(tx,'Interpreter','LaTeX','FontSize',12);
+%             tx = text(600,posY1,sprintf('$$L = %1000.3f cd/m^2$$',obj.colorimetricData.Lv));
+%             set(tx,'Interpreter','LaTeX','FontSize',12);
+%             tx = text(600,posY2,sprintf('$$L_{mes} = %1000.3f cd/m^2$$',obj.colorimetricData.Lv_mesopic));
+%             set(tx,'Interpreter','LaTeX','FontSize',12);
+%             tx = text(600,posY3,sprintf('$$CCT = %d K$$',obj.colorimetricData.T));
+%             %tx = text(600,obj.reflectedSpectrum(220),sprintf('$$\mbox{L} = %d \frac{\mbox{cd}}{\mbox{m}^2}$$',obj.reflectedColorimetricData.Lv));
+%             set(tx,'Interpreter','LaTeX','FontSize',12);
             
             axis('tight');
         end % plot

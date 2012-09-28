@@ -112,22 +112,22 @@ classdef CS2000ColorimetricData < handle
         end%set reflectedSpectrum
     end
     methods ( Access = private )
-        %%calc scotopic luminance
-        function Lv_scotopic = calcScotopicLuminanceFromSpectrum(obj)
+        %% calc scotopic luminance
+        function Lv_scotopic = calcScotopicLuminanceFromSpectrum( obj )
             load 'V_strich_CIE.mat'  %load V_strich and lambda_CIE
             lambda_i = calcCS2000Lambda(obj);
             V_strich_i=interp1(lambda_CIE, V_strich, lambda_i);
             Lv_scotopic = 1699 * sum(V_strich_i .* obj.spectralData);
         end
-        %%calc photopic luminance
-        function Lv_photopic = calcPhotopicLuminanceFromSpectrum(obj)
+        %% calc photopic luminance
+        function Lv_photopic = calcPhotopicLuminanceFromSpectrum( obj )
             load 'V_CIE.mat'  %load V_strich and lambda_CIE
             lambda_i = calcCS2000Lambda(obj);
             V_i=interp1(lambda_CIE, V, lambda_i);
             Lv_photopic = 683 * sum(V_i .* obj.spectralData);
         end
-        %%lambda for CS2000
-        function lambda = calcCS2000Lambda(obj)
+        %% lambda for CS2000
+        function lambda = calcCS2000Lambda( obj )
             lambda = linspace(380,780,401);
         end
         
