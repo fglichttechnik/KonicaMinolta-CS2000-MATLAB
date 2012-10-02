@@ -4,7 +4,8 @@
 classdef CS2000ColorimetricData < handle
     properties
         Le
-        Lv
+        Lv %calculated by cs2000
+        Lv_photopic
         Lv_mesopic
         Lv_scotopic
         X
@@ -71,6 +72,13 @@ classdef CS2000ColorimetricData < handle
             end
             value = obj.Lv;
         end
+        function value = get.Lv_photopic(obj)
+            if (isempty(obj.Lv_photopic))
+                obj.Lv_photopic = ...
+                    calcPhotopicLuminanceFromSpectrum(obj);
+            end
+            value = obj.Lv_photopic;
+        end
         %lazy loading of mesopic data
         function value = get.Lv_mesopic(obj)
             if (isempty(obj.Lv_mesopic))
@@ -88,7 +96,7 @@ classdef CS2000ColorimetricData < handle
             end
             value = obj.Lv_scotopic;
         end%lazy loading of scotopic data
-         %% get spectralData
+        %% get spectralData
         function value = get.spectralData(obj)
             if (iscell(obj.spectralData))
                 value = cell2mat(obj.spectralData);
@@ -96,7 +104,7 @@ classdef CS2000ColorimetricData < handle
                 value = obj.spectralData;
             end
         end%set reflectedSpectrum
-         %% set spectralData
+        %% set spectralData
         function set.spectralData(obj, value)
             if (iscell(value))
                 obj.spectralData = cell2mat(value);
@@ -105,8 +113,8 @@ classdef CS2000ColorimetricData < handle
             end
         end%set reflectedSpectrum
         function value = get.SP(obj)
-            if (ismepty(obj.SP))
-                obj.SP = obj.Lv_scotopic / obj.Lv;
+            if (isempty(obj.SP))
+                obj.SP = obj.Lv_scotopic / obj.Lv_photopic;
             end
             value = obj.SP;
         end%set reflectedSpectrum
@@ -115,16 +123,22 @@ classdef CS2000ColorimetricData < handle
         %% calc scotopic luminance
         function Lv_scotopic = calcScotopicLuminanceFromSpectrum( obj )
             load 'V_strich_CIE.mat'  %load V_strich and lambda_CIE
+            fromLambda = 380;
+            toLambda = 780;
             lambda_i = calcCS2000Lambda(obj);
+            resolution = length( lambda_i );
             V_strich_i=interp1(lambda_CIE, V_strich, lambda_i);
-            Lv_scotopic = 1699 * sum(V_strich_i .* obj.spectralData);
+            Lv_scotopic = 1699 * ( toLambda - fromLambda ) / resolution * sum(V_strich_i .* obj.spectralData);
         end
         %% calc photopic luminance
         function Lv_photopic = calcPhotopicLuminanceFromSpectrum( obj )
             load 'V_CIE.mat'  %load V_strich and lambda_CIE
+            fromLambda = 380;
+            toLambda = 780;
             lambda_i = calcCS2000Lambda(obj);
+            resolution = length( lambda_i );
             V_i=interp1(lambda_CIE, V, lambda_i);
-            Lv_photopic = 683 * sum(V_i .* obj.spectralData);
+            Lv_photopic = 683 * ( toLambda - fromLambda ) / resolution * sum(V_i .* obj.spectralData);
         end
         %% lambda for CS2000
         function lambda = calcCS2000Lambda( obj )
