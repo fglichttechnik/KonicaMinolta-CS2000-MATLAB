@@ -1,7 +1,8 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 function message = CS2000_readBacklight()
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
-%
 %Reads the setting of control of external display backlight during
 %measurement.
 % 

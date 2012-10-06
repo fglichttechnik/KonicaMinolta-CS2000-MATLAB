@@ -1,3 +1,9 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function meansOfMeasurements = CS2000_calcMeansOfMeasuredData(measurements)
 
 % declare variables

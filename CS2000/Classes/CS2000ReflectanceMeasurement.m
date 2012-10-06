@@ -1,3 +1,7 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 classdef CS2000ReflectanceMeasurement < handle
     %UNTITLED Summary of this class goes here
     %   Detailed explanation goes here

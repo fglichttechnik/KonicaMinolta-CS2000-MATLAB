@@ -1,6 +1,10 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function filter = CS2000_readNDFilter()
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 % NDFR: Reads which (if any) external ND filter is attached to the 
 % instrument.
 

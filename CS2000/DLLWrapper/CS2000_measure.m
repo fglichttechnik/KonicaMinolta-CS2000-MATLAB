@@ -1,7 +1,8 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 function [message1, message2, measuredData, colorimetricNames] =  CS2000_measure()
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
-%
 %First, the function performs only measurement (measurement data are not 
 %output). A pre-measurement is taken to determine the required measurment 
 %time and then the actual measurement begins automatically. 

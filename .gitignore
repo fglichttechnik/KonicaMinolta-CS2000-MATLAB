@@ -1,0 +1,6 @@
+#ignore MATLAB stuff
+*.asv
+*.*~
+
+#ignore compiled exe files
+*.exe

@@ -1,6 +1,8 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 function [measuredData, colorimetricNames] = CS2000_readMeasurement()
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 %
 %Reads measurement data from instrument. Reads all 4 blocks of spectral 
 %data and any set of colorimetric data. 

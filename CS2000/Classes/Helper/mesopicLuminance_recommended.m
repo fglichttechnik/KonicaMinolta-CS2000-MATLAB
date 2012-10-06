@@ -1,10 +1,14 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+%CAVE: maybe outdated, review required
+
 function [Lmes, imgVisualization] = mesopicLuminance_recommended(Lp,Ls)
 %##################################################
 %THIS FUNCTION IS MAINTAINED IN THE LMK PROJECT!!!
 %MAKE ANY CHANGES IN THE LMK PROJECT, NOT HERE 
 %##################################################
-%author Jan Winter, Sandy Buschmann TU Berlin
-%email j.winter@tu-berlin.de
 %calculates the mesopic luminance according to the CIE RECOMMENDED SYSTEM
 %FOR PERFORMANCE BASED MESOPIC PHOTOMETRY
 %Lp, Ls might be single values or matrices

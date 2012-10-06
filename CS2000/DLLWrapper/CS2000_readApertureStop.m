@@ -1,7 +1,8 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 function aperture = CS2000_readApertureStop()
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
-%
 %Reads the status of the instrument's aperture stop.
 
 global s

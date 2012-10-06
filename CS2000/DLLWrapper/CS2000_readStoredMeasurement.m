@@ -1,6 +1,10 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function [text, measurements] = CS2000_readStoredMeasurement()
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 % Reads measurement data stored in memory from the instrument.
     % Instrument must be connected (see CS2000_initConnection).
     % Trys to read data from number 00 to 99 and breaks if there are no

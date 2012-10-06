@@ -1,6 +1,8 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 function plotDataFromCellArray(measurements,options,filename)
-%author Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 %options might be 'time'
 
 SAVEFIGURES = 1;    %figures will be saved if ~0

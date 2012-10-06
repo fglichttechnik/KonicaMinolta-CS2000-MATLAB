@@ -1,6 +1,12 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
+%CAVE: most probably outdated, review required
+
 function [Lmes, imgVisualization] = mesopicLuminance_intermediate(Lp,Ls)
-%author Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 %calculates the mesopic luminance according to the INTERMEDIATE SYSTEM
 %Lp, Ls might be single values or matrices
 %Lp = photopic luminance

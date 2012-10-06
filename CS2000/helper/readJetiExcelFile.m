@@ -1,3 +1,9 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function data = readJetiExcelFile(filename)
 %function data = readJetiExcelFile(filename)
 %   reads a Jeti excel file and returns the spectral data

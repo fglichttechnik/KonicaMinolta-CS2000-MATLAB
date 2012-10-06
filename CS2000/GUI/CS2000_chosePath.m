@@ -1,6 +1,10 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function varargout = CS2000_chosePath(varargin)
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 % CS2000_CHOSEPATH M-file for CS2000_chosePath.fig
 %      CS2000_CHOSEPATH, by itself, creates a new CS2000_CHOSEPATH or raises the existing
 %      singleton*.

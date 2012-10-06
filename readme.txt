@@ -1,6 +1,14 @@
-**Please execute "addPathWithSubpathes.m" first to make sure that all files and folders are 
-  added to the MATLAB search path.
+AUTHOR: Jan Winter, TU Berlin, FG Lichttechnik,
+	j.winter@tu-berlin.de, www.li.tu-berlin.de
+LICENSE: free to use at your own risk. Kudos appreciated.
 
-**In folder "CS2000" you can execute the GUI to make measurements by starting "CS2000_startGUI.m" 
-  or "CS2000_startGUI.exe" (outside MATLAB). In folder "CS2000_evaluation" you find methods for data 
-  evaluation.
+This is a framework for MATLAB to communicate with a KonicaMinolta CS-2000 spectroradiometer. Also provided is a GUI. 
+
+% start the GUI with this function:
+CS2000_startGUI();
+
+% measurements from command line:
+comPort = 'COM4';
+CS2000_initConnection( comPort );
+[message1, message2, cs2000Measurement, colorimetricNames] = CS2000_measure();
+CS2000_terminateConnection();

@@ -1,6 +1,10 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function CS2000_setNDFilter(filter)
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 % NDFS: Sets which external ND filter (if any) is attached to the
 % instrument. Setting is stored in flash ROM, and is maintainded even if
 % instrument power is switched off.

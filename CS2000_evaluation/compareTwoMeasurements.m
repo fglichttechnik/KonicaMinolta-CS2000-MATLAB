@@ -1,6 +1,8 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
 function compareTwoMeasurements( measurement1, measurement2 )
-%author Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 

@@ -1,7 +1,8 @@
-function message = CS2000_initConnection(comPort)
-%author Sandy Buschmann, Jan Winter TU Berlin
-%email j.winter@tu-berlin.de
-%
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+function message = CS2000_initConnection( comPort )
 % Initiates connection to the instrument.
 % 
 % Input: comPort = port where the instrument is connected via USB. See 
@@ -53,7 +54,7 @@ try
 catch err
     disp(err.message)
     message = 'Sorry, no connection.';
-    disp('Please chose another COM or make sure that instrument is connected.');    
+    disp('Please choose another COM or make sure that instrument is connected.');    
 end
    
     

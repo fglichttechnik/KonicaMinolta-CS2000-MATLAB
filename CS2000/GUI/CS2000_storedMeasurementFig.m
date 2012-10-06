@@ -1,3 +1,9 @@
+% AUTHOR:	Jan Winter, Sandy Buschmann, TU Berlin, FG Lichttechnik,
+% 			j.winter@tu-berlin.de, www.li.tu-berlin.de
+% LICENSE: 	free to use at your own risk. Kudos appreciated.
+
+
+
 function varargout = CS2000_storedMeasurementFig(varargin)
 % CS2000_STOREDMEASUREMENTFIG M-file for CS2000_storedMeasurementFig.fig
 %      CS2000_STOREDMEASUREMENTFIG, by itself, creates a new CS2000_STOREDMEASUREMENTFIG or raises the existing
