@@ -141,11 +141,11 @@ classdef CS2000ColorimetricData < handle
             lambda_i = calcCS2000Lambda(obj);
             resolution = length( lambda_i );
             V_i=interp1(lambda_CIE, V, lambda_i);
-            Lv_photopic = 683 * ( toLambda - fromLambda ) / resolution * sum(V_i .* obj.spectralData);
+            Lv_photopic = 683 * ( toLambda - fromLambda ) / resolution * sum(V_i' .* obj.spectralData);
         end
         %% lambda for CS2000
         function lambda = calcCS2000Lambda( obj )
-            lambda = linspace(380,780,401);
+            lambda = linspace( 380, 780, 401 );
         end
         
     end % methods
